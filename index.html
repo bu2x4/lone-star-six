@@ -1,0 +1,1058 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b2b4c">
+  <meta name="description" content="The interactive Lone Star Six lacrosse playbook.">
+  <title>Lone Star Six | Interactive Playbook</title>
+  <style>
+    :root {
+      --navy: #082a4a;
+      --navy-2: #0f3b64;
+      --red: #c82e3c;
+      --blue: #1476b8;
+      --cream: #f7f3e9;
+      --white: #ffffff;
+      --ink: #102236;
+      --muted: #607083;
+      --gold: #efbd4e;
+      --green: #1f9b68;
+      --field: #1f704f;
+      --field-dark: #155b3f;
+      --line: rgba(255,255,255,.82);
+      --shadow: 0 18px 48px rgba(8,42,74,.14);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 6% 2%, rgba(20,118,184,.10), transparent 25rem),
+        linear-gradient(180deg, #f8f4eb 0%, #eef2f5 60%, #f8f4eb 100%);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.45;
+    }
+
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 3px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 10px max(16px, env(safe-area-inset-left));
+      color: white;
+      background: rgba(8,42,74,.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 900; letter-spacing: .04em; }
+    .brand-star { color: var(--white); font-size: 24px; filter: drop-shadow(4px 0 0 var(--red)); }
+    .progress-wrap { display: flex; align-items: center; gap: 10px; min-width: 150px; }
+    .progress-track { height: 8px; flex: 1; overflow: hidden; background: rgba(255,255,255,.18); border-radius: 999px; }
+    .progress-fill { width: 0; height: 100%; background: linear-gradient(90deg, var(--gold), #fff2ac); transition: width .35s ease; }
+    .progress-text { min-width: 36px; font-size: 12px; font-weight: 800; text-align: right; }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 72px 18px 62px;
+      color: white;
+      background:
+        linear-gradient(116deg, rgba(8,42,74,.96) 0 48%, rgba(16,58,97,.92) 48% 69%, rgba(200,46,60,.94) 69%),
+        var(--navy);
+    }
+    .hero::before {
+      content: "★";
+      position: absolute;
+      right: -3vw;
+      top: -110px;
+      font-size: min(44vw, 560px);
+      line-height: 1;
+      color: rgba(255,255,255,.07);
+      transform: rotate(-8deg);
+    }
+    .hero-inner { position: relative; max-width: 1120px; margin: auto; }
+    .eyebrow { display: inline-flex; gap: 8px; align-items: center; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; color: #dfeeff; font-size: 12px; }
+    h1 { margin: 12px 0 8px; font-size: clamp(52px, 9vw, 106px); line-height: .86; letter-spacing: -.06em; text-transform: uppercase; }
+    .hero h1 span { display: block; color: var(--gold); }
+    .hero-copy { max-width: 670px; margin: 24px 0 0; font-size: clamp(18px, 2.5vw, 24px); font-weight: 700; }
+    .hero-rule { margin: 20px 0 0; font-weight: 900; letter-spacing: .05em; text-transform: uppercase; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+
+    .btn {
+      min-height: 46px;
+      padding: 12px 18px;
+      border: 0;
+      border-radius: 999px;
+      font-weight: 900;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { color: var(--navy); background: var(--gold); box-shadow: 0 8px 22px rgba(239,189,78,.28); }
+    .btn-secondary { color: white; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.35); }
+    .btn-dark { color: white; background: var(--navy); }
+    .btn-red { color: white; background: var(--red); }
+    .btn-small { min-height: 38px; padding: 8px 14px; font-size: 14px; }
+
+    main { max-width: 1160px; margin: auto; padding: 34px 16px 80px; }
+    .section-head { margin: 42px 0 18px; }
+    .section-head h2 { margin: 0; font-size: clamp(30px, 5vw, 52px); line-height: 1; letter-spacing: -.045em; text-transform: uppercase; }
+    .section-head p { max-width: 760px; margin: 10px 0 0; color: var(--muted); font-size: 17px; }
+
+    .mission-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .mission-card {
+      min-height: 150px;
+      padding: 20px;
+      color: white;
+      border-radius: var(--radius);
+      background: var(--navy);
+      box-shadow: var(--shadow);
+    }
+    .mission-card:nth-child(2) { background: var(--red); }
+    .mission-card:nth-child(3) { background: var(--blue); }
+    .mission-card:nth-child(4) { background: #26364a; }
+    .mission-num { font-size: 40px; font-weight: 950; line-height: 1; color: var(--gold); }
+    .mission-card h3 { margin: 12px 0 4px; font-size: 18px; }
+    .mission-card p { margin: 0; color: rgba(255,255,255,.82); font-size: 14px; }
+
+    .module-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .module-card {
+      position: relative;
+      min-height: 205px;
+      padding: 22px;
+      overflow: hidden;
+      border: 1px solid rgba(8,42,74,.10);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.88);
+      box-shadow: var(--shadow);
+    }
+    .module-card::after {
+      content: attr(data-number);
+      position: absolute;
+      right: -8px;
+      bottom: -35px;
+      font-size: 120px;
+      font-weight: 950;
+      line-height: 1;
+      color: rgba(8,42,74,.045);
+    }
+    .module-card h3 { position: relative; margin: 10px 0 6px; font-size: 23px; line-height: 1.05; }
+    .module-card p { position: relative; color: var(--muted); margin: 0 0 18px; }
+    .status-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; color: var(--navy); background: #e5eef5; border-radius: 99px; font-weight: 850; font-size: 12px; }
+    .status-pill.done { color: #075b3b; background: #dcf6ea; }
+    .module-card .btn { position: relative; z-index: 1; }
+
+    .playbook-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1.28fr) minmax(290px, .72fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .board-card, .detail-card, .rules-card, .quiz-card {
+      border: 1px solid rgba(8,42,74,.1);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.94);
+      box-shadow: var(--shadow);
+    }
+    .board-card { padding: 14px; }
+    .scenario-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 12px; scrollbar-width: thin; }
+    .scenario-tab { flex: 0 0 auto; padding: 9px 13px; border: 0; border-radius: 999px; color: var(--navy); background: #e8eef3; font-weight: 850; }
+    .scenario-tab.active { color: white; background: var(--navy); }
+
+    .lab-mode-bar { display: flex; margin: 0 2px 12px; }
+    .what-if-launch { width: 100%; display: flex; align-items: center; justify-content: center; gap: 11px; min-height: 58px; padding: 9px 18px; border: 3px solid var(--gold); border-radius: 16px; color: white; background: var(--navy); box-shadow: 0 7px 0 #d2a935, 0 13px 24px rgba(8,42,74,.2); text-align: left; }
+    .what-if-launch:hover { transform: translateY(-1px); }
+    .what-if-launch.active { border-color: #ffdc7a; background: var(--red); box-shadow: 0 7px 0 #8e1b27, 0 13px 24px rgba(8,42,74,.2); }
+    .mode-icon { display: grid; place-items: center; width: 34px; height: 34px; flex: 0 0 auto; border-radius: 50%; color: var(--navy); background: var(--gold); font-size: 20px; font-weight: 950; }
+    .what-if-launch strong, .what-if-launch small { display: block; }
+    .what-if-launch strong { font-size: 17px; line-height: 1.05; text-transform: uppercase; letter-spacing: .04em; }
+    .what-if-launch small { margin-top: 3px; color: rgba(255,255,255,.82); font-size: 12px; font-weight: 750; }
+
+    .field-wrap { position: relative; border-radius: 18px; overflow: hidden; background: var(--field); aspect-ratio: 7 / 9; max-height: 680px; margin: auto; }
+    #field { display: block; width: 100%; height: 100%; }
+    .field-grain { pointer-events: none; position: absolute; inset: 0; opacity: .14; background-image: repeating-linear-gradient(90deg, transparent 0 48px, rgba(255,255,255,.12) 49px 50px); }
+    .attack-label { position: absolute; left: 50%; top: 10px; transform: translateX(-50%); color: rgba(255,255,255,.85); font-size: 11px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .player { cursor: pointer; transition: filter .2s ease; }
+    .player:hover { filter: brightness(1.12); }
+    .field-wrap.what-if #field { touch-action: none; }
+    .field-wrap.what-if .player { cursor: grab; }
+    .field-wrap.what-if .player.dragging { cursor: grabbing; filter: brightness(1.2) drop-shadow(0 0 10px rgba(239,189,78,.9)); }
+    .field-wrap.what-if .player.home circle, .field-wrap.what-if .player.goalie circle { stroke: var(--gold); stroke-width: 5; }
+    .field-wrap.what-if .player.opponent circle { stroke: #8fd4ff; stroke-width: 5; }
+    .player circle { stroke: white; stroke-width: 3; filter: drop-shadow(0 4px 5px rgba(0,0,0,.24)); }
+    .player text { fill: white; font-size: 12px; font-weight: 950; text-anchor: middle; dominant-baseline: middle; pointer-events: none; }
+    .player.opponent circle { fill: #26364a; stroke: #d6e0ea; }
+    .player.home circle { fill: var(--red); }
+    .player.goalie circle { fill: var(--gold); }
+    .player.goalie text { fill: var(--navy); }
+    .ball { fill: var(--gold); stroke: #5b3d00; stroke-width: 1.5; filter: drop-shadow(0 2px 2px rgba(0,0,0,.4)); }
+    .motion-path { fill: none; stroke: rgba(255,255,255,.74); stroke-width: 3; stroke-dasharray: 8 7; marker-end: url(#arrow); opacity: 0; transition: opacity .2s; }
+    .pass-path { stroke: var(--gold); stroke-width: 4; }
+    .motion-path.visible { opacity: 1; }
+
+    .controls { display: grid; grid-template-columns: auto auto auto 1fr; gap: 8px; align-items: center; padding: 12px 2px 2px; }
+    .control-btn { width: 44px; height: 44px; border: 0; border-radius: 13px; color: white; background: var(--navy); font-weight: 900; }
+    .step-track { height: 7px; overflow: hidden; background: #e2e9ef; border-radius: 999px; }
+    .step-fill { width: 0; height: 100%; background: var(--red); transition: width .25s ease; }
+
+    .detail-card { padding: 24px; position: sticky; top: 74px; }
+    .detail-kicker { color: var(--red); font-size: 12px; font-weight: 950; letter-spacing: .13em; text-transform: uppercase; }
+    .detail-card h3 { margin: 6px 0 10px; font-size: 30px; line-height: 1; }
+    .detail-card p { color: var(--muted); }
+    .step-box { padding: 14px; margin: 16px 0; border-left: 5px solid var(--gold); background: #f4f0e5; border-radius: 0 14px 14px 0; }
+    .step-box strong { display: block; color: var(--navy); }
+    .role-list { display: grid; gap: 8px; margin-top: 16px; }
+    .role-row { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 12px; background: #edf2f5; }
+    .role-dot { width: 14px; height: 14px; flex: 0 0 auto; margin-top: 3px; border-radius: 50%; background: var(--red); border: 2px solid white; box-shadow: 0 0 0 1px var(--red); }
+    .what-if-panel { display: none; margin-top: 18px; padding: 16px; border: 2px solid #f0c761; border-radius: 16px; background: #fff8df; }
+    .what-if-panel.visible { display: block; }
+    .what-if-panel h4 { margin: 0 0 6px; color: var(--navy); font-size: 18px; }
+    .what-if-panel p { margin: 0 0 10px; color: #4e5e6f; font-size: 14px; }
+    .what-if-panel ul { margin: 0; padding-left: 18px; color: #33475a; font-size: 14px; }
+    .what-if-panel li + li { margin-top: 6px; }
+    .what-if-hint { position: absolute; left: 50%; bottom: 12px; z-index: 3; display: none; transform: translateX(-50%); width: max-content; max-width: calc(100% - 24px); padding: 8px 13px; color: var(--navy); background: rgba(255,244,197,.94); border-radius: 999px; font-size: 12px; font-weight: 900; text-align: center; box-shadow: 0 6px 18px rgba(0,0,0,.2); pointer-events: none; }
+    .field-wrap.what-if .what-if-hint { display: block; }
+
+    .rules-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .rules-card { padding: 22px; }
+    .rules-card h3 { margin: 0 0 12px; font-size: 23px; }
+    .rule-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+    .rule-list li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; }
+    .rule-icon { width: 28px; height: 28px; display: grid; place-items: center; color: white; background: var(--navy); border-radius: 50%; font-size: 13px; font-weight: 950; }
+
+    .call-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .call-card { padding: 18px 14px; color: white; background: var(--navy); border-radius: 18px; text-align: center; }
+    .call-card:nth-child(3n+2) { background: var(--red); }
+    .call-card:nth-child(3n) { background: var(--blue); }
+    .call-word { display: block; font-size: 20px; font-weight: 950; text-transform: uppercase; }
+    .call-card small { display: block; margin-top: 5px; color: rgba(255,255,255,.82); }
+
+    .quiz-card { padding: 24px; }
+    .quiz-question { display: none; }
+    .quiz-question.active { display: block; }
+    .quiz-meta { color: var(--red); font-weight: 900; text-transform: uppercase; letter-spacing: .08em; font-size: 12px; }
+    .quiz-question h3 { font-size: clamp(24px, 4vw, 36px); line-height: 1.08; margin: 8px 0 18px; }
+    .answers { display: grid; gap: 10px; }
+    .answer-btn { padding: 15px 16px; border: 2px solid #dce4ea; border-radius: 15px; color: var(--ink); background: white; text-align: left; font-weight: 750; }
+    .answer-btn:hover { border-color: var(--blue); }
+    .answer-btn.correct { border-color: var(--green); background: #e3f6ed; }
+    .answer-btn.wrong { border-color: var(--red); background: #fbe8eb; }
+    .feedback { min-height: 52px; margin-top: 12px; padding: 12px 14px; border-radius: 13px; color: var(--muted); background: #f0f3f5; }
+    .quiz-footer { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-top: 14px; }
+    .quiz-score { font-weight: 900; }
+
+    .completion { margin-top: 44px; padding: 30px; color: white; background: linear-gradient(135deg, var(--navy), #113d64 62%, var(--red) 62%); border-radius: 28px; box-shadow: var(--shadow); }
+    .completion h2 { font-size: clamp(32px, 6vw, 58px); line-height: .95; margin: 0 0 10px; text-transform: uppercase; }
+    .completion p { max-width: 620px; color: rgba(255,255,255,.82); }
+    .name-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .name-row input { min-height: 48px; flex: 1 1 230px; padding: 11px 15px; border: 2px solid rgba(255,255,255,.35); border-radius: 14px; color: white; background: rgba(255,255,255,.1); }
+    .name-row input::placeholder { color: rgba(255,255,255,.65); }
+
+    .modal { position: fixed; inset: 0; z-index: 60; display: none; align-items: center; justify-content: center; padding: 20px; background: rgba(4,17,30,.82); backdrop-filter: blur(8px); }
+    .modal.open { display: flex; }
+    .certificate {
+      width: min(720px, 100%);
+      position: relative;
+      overflow: hidden;
+      padding: clamp(24px, 5vw, 52px);
+      color: white;
+      background: linear-gradient(140deg, var(--navy) 0 68%, var(--red) 68%);
+      border: 7px solid white;
+      box-shadow: 0 30px 90px rgba(0,0,0,.4);
+    }
+    .certificate::after { content: "★"; position: absolute; right: -30px; bottom: -80px; color: rgba(255,255,255,.14); font-size: 260px; }
+    .cert-top { font-weight: 950; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
+    .certificate h2 { position: relative; z-index: 1; margin: 30px 0 0; font-size: clamp(42px, 10vw, 82px); line-height: .85; text-transform: uppercase; letter-spacing: -.06em; }
+    .cert-name { position: relative; z-index: 1; margin: 24px 0; font-size: clamp(26px, 6vw, 46px); font-weight: 800; border-bottom: 2px solid rgba(255,255,255,.55); padding-bottom: 8px; }
+    .cert-stats { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 18px; }
+    .cert-stat strong { display: block; font-size: 28px; color: var(--gold); }
+    .cert-stat span { font-size: 12px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+    .cert-motto { position: relative; z-index: 1; margin-top: 30px; font-weight: 950; text-transform: uppercase; letter-spacing: .08em; }
+    .modal-actions { width: min(720px, 100%); display: flex; gap: 10px; justify-content: flex-end; margin-top: 12px; }
+    .modal-inner { width: min(720px, 100%); }
+
+    footer { padding: 28px 16px; color: rgba(255,255,255,.68); background: #071d31; text-align: center; font-size: 13px; }
+
+    .toast { position: fixed; left: 50%; bottom: 22px; z-index: 80; transform: translate(-50%, 24px); opacity: 0; padding: 12px 18px; color: white; background: #071d31; border-radius: 999px; box-shadow: var(--shadow); transition: .25s ease; pointer-events: none; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    @media (max-width: 900px) {
+      .mission-grid { grid-template-columns: repeat(2, 1fr); }
+      .module-grid { grid-template-columns: repeat(2, 1fr); }
+      .playbook-shell { grid-template-columns: 1fr; }
+      .detail-card { position: static; }
+      .call-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 620px) {
+      .topbar { padding-top: max(10px, env(safe-area-inset-top)); }
+      .brand span:last-child { display: none; }
+      .hero { padding-top: 52px; }
+      .mission-grid, .module-grid, .rules-grid { grid-template-columns: 1fr; }
+      .mission-card { min-height: 120px; }
+      .call-grid { grid-template-columns: repeat(2, 1fr); }
+      .controls { grid-template-columns: repeat(3, auto); }
+      .step-track { grid-column: 1 / -1; }
+      .board-card { padding: 8px; }
+      .completion { padding: 24px 18px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
+    @media print {
+      body > *:not(.modal) { display: none !important; }
+      .modal { position: static; display: block !important; background: white; padding: 0; }
+      .modal-actions { display: none; }
+      .certificate { width: 100%; min-height: 90vh; box-shadow: none; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-star">★</span><span>LONE STAR SIX</span></div>
+    <div class="progress-wrap" aria-label="Playbook completion">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-text" id="progressText">0%</div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">Texas Sixes • Player Playbook</div>
+      <h1>Lone Star <span>Six</span></h1>
+      <p class="hero-copy">Play fast. Stay fresh. Protect the middle. Make the defense choose.</p>
+      <p class="hero-rule">Don’t mess with our house.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="document.querySelector('#modules').scrollIntoView()">Start the playbook</button>
+        <button class="btn btn-secondary" onclick="document.querySelector('#fieldLab').scrollIntoView()">Open field lab</button>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <section aria-labelledby="identityTitle">
+      <div class="section-head">
+        <h2 id="identityTitle">How we play</h2>
+        <p>These four rules solve most situations. Know them before learning the details.</p>
+      </div>
+      <div class="mission-grid">
+        <article class="mission-card"><div class="mission-num">01</div><h3>Advantage first</h3><p>If transition gives us numbers or separation, attack before changing.</p></article>
+        <article class="mission-card"><div class="mission-num">02</div><h3>Fresh legs</h3><p>Change from secure offense, one player at a time, through the marked sideline zone.</p></article>
+        <article class="mission-card"><div class="mission-num">03</div><h3>Protect the house</h3><p>In transition, defend the middle first. Match from the inside outward.</p></article>
+        <article class="mission-card"><div class="mission-num">04</div><h3>Communicate early</h3><p>Hot. Two. Switch. Slide. Matched. Short calls remove hesitation.</p></article>
+      </div>
+    </section>
+
+    <section id="modules" aria-labelledby="modulesTitle">
+      <div class="section-head">
+        <h2 id="modulesTitle">Six short modules</h2>
+        <p>Complete each section, then pass the game situations challenge. Your progress stays on this device.</p>
+      </div>
+      <div class="module-grid" id="moduleGrid"></div>
+    </section>
+
+    <section id="fieldLab" aria-labelledby="fieldTitle">
+      <div class="section-head">
+        <h2 id="fieldTitle">Interactive field lab</h2>
+        <p>Choose a situation, move through it step by step, or turn on What If mode and drag any player to test how the shape reacts.</p>
+      </div>
+      <div class="playbook-shell">
+        <div class="board-card">
+          <div class="scenario-tabs" id="scenarioTabs"></div>
+          <div class="lab-mode-bar">
+            <button class="what-if-launch" id="whatIfBtn" aria-pressed="false">
+              <span class="mode-icon" aria-hidden="true">↔</span>
+              <span><strong class="mode-title">Open What If Lab</strong><small class="mode-subtitle">Drag any player to test the team’s reaction</small></span>
+            </button>
+          </div>
+          <div class="field-wrap">
+            <svg id="field" viewBox="0 0 700 900" role="img" aria-label="Animated top-down lacrosse field">
+              <defs>
+                <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,6 L8,3 z" fill="currentColor"></path>
+                </marker>
+                <pattern id="mow" width="80" height="80" patternUnits="userSpaceOnUse">
+                  <rect width="40" height="80" fill="rgba(255,255,255,.025)"></rect>
+                </pattern>
+              </defs>
+              <rect width="700" height="900" fill="url(#mow)"></rect>
+              <rect x="40" y="35" width="620" height="830" rx="8" fill="none" stroke="var(--line)" stroke-width="4"></rect>
+              <line x1="40" y1="450" x2="660" y2="450" stroke="var(--line)" stroke-width="3"></line>
+              <circle cx="350" cy="450" r="58" fill="none" stroke="var(--line)" stroke-width="3"></circle>
+              <circle cx="350" cy="160" r="62" fill="none" stroke="var(--line)" stroke-width="3"></circle>
+              <circle cx="350" cy="740" r="62" fill="none" stroke="var(--line)" stroke-width="3"></circle>
+              <path d="M315 160 L315 126 L385 126 L385 160" fill="none" stroke="white" stroke-width="6"></path>
+              <path d="M315 740 L315 774 L385 774 L385 740" fill="none" stroke="white" stroke-width="6"></path>
+              <line x1="270" y1="160" x2="430" y2="160" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-dasharray="8 8"></line>
+              <line x1="270" y1="740" x2="430" y2="740" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-dasharray="8 8"></line>
+              <rect x="610" y="385" width="50" height="130" fill="rgba(239,189,78,.18)" stroke="rgba(239,189,78,.9)" stroke-width="3"></rect>
+              <text x="635" y="450" text-anchor="middle" fill="rgba(255,255,255,.9)" font-size="12" font-weight="900" transform="rotate(-90 635 450)">SIDELINE SUB ZONE</text>
+              <g id="pathsLayer"></g>
+              <g id="playersLayer"></g>
+              <circle class="ball" id="ball" cx="350" cy="450" r="8"></circle>
+            </svg>
+            <div class="field-grain"></div>
+            <div class="attack-label">We attack this way ↑</div>
+            <div class="what-if-hint">Drag any player. Release to see the consequence.</div>
+          </div>
+          <div class="controls">
+            <button class="control-btn" id="resetBtn" aria-label="Reset animation">↺</button>
+            <button class="control-btn" id="playBtn" aria-label="Play animation">▶</button>
+            <button class="control-btn" id="stepBtn" aria-label="Next step">→</button>
+            <div class="step-track"><div class="step-fill" id="stepFill"></div></div>
+          </div>
+        </div>
+        <aside class="detail-card" aria-live="polite">
+          <div class="detail-kicker" id="detailKicker">Situation 1</div>
+          <h3 id="detailTitle">Goalie outlet</h3>
+          <p id="detailDescription"></p>
+          <div class="step-box"><strong id="stepName">Ready</strong><span id="stepInstruction">Press play or step forward.</span></div>
+          <div class="role-list" id="roleList"></div>
+          <div class="what-if-panel" id="whatIfPanel">
+            <h4 id="whatIfTitle">What happens?</h4>
+            <p id="whatIfSummary">Move a player to test the shape.</p>
+            <ul id="whatIfResults"></ul>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section aria-labelledby="rulesTitle">
+      <div class="section-head"><h2 id="rulesTitle">Rules that change decisions</h2><p>This is the local 2026 PLL Leagues Sixes rule set used by Texas 6s Stampede.</p></div>
+      <div class="rules-grid">
+        <article class="rules-card">
+          <h3>Game and possession</h3>
+          <ul class="rule-list">
+            <li><span class="rule-icon">32</span><span>Two 16-minute running halves with a five-minute halftime.</span></li>
+            <li><span class="rule-icon">30</span><span>Thirty-second shot clock. It resets after a change of possession or a qualifying shot contact.</span></li>
+            <li><span class="rule-icon">5</span><span>After a goal, the goalie has five seconds to exit the crease or pass.</span></li>
+            <li><span class="rule-icon">↤</span><span>Once established in the offensive half, causing the ball to cross back over midfield is a turnover.</span></li>
+            <li><span class="rule-icon">1</span><span>Each team has one 30-second timeout. Coach may call it during possession or a dead ball.</span></li>
+          </ul>
+        </article>
+        <article class="rules-card">
+          <h3>Shots and defense</h3>
+          <ul class="rule-list">
+            <li><span class="rule-icon">×</span><span>An untouched missed shot that leaves the field belongs to the defense. There is no shot backup.</span></li>
+            <li><span class="rule-icon">G</span><span>A defensive deflection, including a goalie touch, returns possession to the offense. The goal frame does not.</span></li>
+            <li><span class="rule-icon">□</span><span>Walling is illegal. Defenders must stay active and cannot crowd the goal simply to block shots.</span></li>
+            <li><span class="rule-icon">0</span><span>No body checking and no long poles. All field players use 36-to-42-inch sticks.</span></li>
+            <li><span class="rule-icon">8</span><span>There is no automatic clearing count. If an official calls stalling, the team has eight seconds to cross midfield.</span></li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="callsTitle">
+      <div class="section-head"><h2 id="callsTitle">Our calls</h2><p>Say the word early and loudly. A call only works when all five players act together.</p></div>
+      <div class="call-grid">
+        <div class="call-card"><span class="call-word">Expand</span><small>Inside player sends the four outside</small></div>
+        <div class="call-card"><span class="call-word">Change</span><small>Tired player begins the exit rotation</small></div>
+        <div class="call-card"><span class="call-word">Hold</span><small>Cancel all substitutions</small></div>
+        <div class="call-card"><span class="call-word">House</span><small>Protect the middle first</small></div>
+        <div class="call-card"><span class="call-word">Hot</span><small>Nearest off-ball defender is help</small></div>
+        <div class="call-card"><span class="call-word">Two</span><small>Next defender supports the slide</small></div>
+        <div class="call-card"><span class="call-word">Slide</span><small>Goalie orders full commitment</small></div>
+        <div class="call-card"><span class="call-word">Switch</span><small>Exchange assignments on the pick</small></div>
+        <div class="call-card"><span class="call-word">Matched</span><small>Five threats are covered</small></div>
+      </div>
+    </section>
+
+    <section id="quiz" aria-labelledby="quizTitle">
+      <div class="section-head"><h2 id="quizTitle">Game situations challenge</h2><p>Eight decisions. Score at least 7 out of 8 to earn your Ready card.</p></div>
+      <div class="quiz-card">
+        <div id="quizQuestions"></div>
+        <div class="feedback" id="feedback">Choose the best team decision.</div>
+        <div class="quiz-footer">
+          <div class="quiz-score" id="quizScore">Score: 0 / 0</div>
+          <button class="btn btn-dark btn-small" id="nextQuestion" disabled>Next</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="completion" aria-labelledby="readyTitle">
+      <h2 id="readyTitle">Prove you’re ready</h2>
+      <p>Complete all six modules and score at least 7 out of 8. Enter your name to create a card you can screenshot and send to Coach.</p>
+      <div class="name-row">
+        <input id="playerName" autocomplete="name" maxlength="36" placeholder="Your name" aria-label="Player name">
+        <button class="btn btn-primary" id="openCertificate">Create Ready card</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="certificateModal" role="dialog" aria-modal="true" aria-labelledby="certTitle">
+    <div class="modal-inner">
+      <div class="certificate" id="certificate">
+        <div class="cert-top">Lone Star Six • Player Ready Card</div>
+        <h2 id="certTitle">Ready to ride</h2>
+        <div class="cert-name" id="certName">Player Name</div>
+        <div class="cert-stats">
+          <div class="cert-stat"><strong id="certModules">0/6</strong><span>Modules</span></div>
+          <div class="cert-stat"><strong id="certScore">0/8</strong><span>Challenge</span></div>
+          <div class="cert-stat"><strong id="certDate">—</strong><span>Completed</span></div>
+        </div>
+        <div class="cert-motto">Fast legs • Clear calls • Texas pressure</div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary btn-small" id="closeCertificate">Close</button>
+        <button class="btn btn-primary btn-small" onclick="window.print()">Print or save</button>
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+
+  <footer>Lone Star Six • Texas 6s Stampede • Player playbook</footer>
+
+  <script>
+    const STORAGE_KEY = 'loneStarSixProgressV1';
+    const defaultState = { completed: [], quizBest: 0, playerName: '' };
+    const state = Object.assign({}, defaultState, JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'));
+
+    const modules = [
+      { id: 'rules', title: 'Know the clock', time: '2 min', text: 'Shot clock, restarts, over-and-back, missed shots, and legal defense.', target: '#rulesTitle' },
+      { id: 'transition', title: 'Clear with width', time: '3 min', text: 'Goalie looks wide first, uses middle only beyond midfield, and enters against a settled zone.', scenario: 0 },
+      { id: 'offense', title: 'Box and One', time: '4 min', text: 'Cut and replace, two-player reads, collapse, expand, and shot choice.', scenario: 1 },
+      { id: 'substitution', title: 'Fresh-leg changes', time: '3 min', text: 'Player-run queue, sideline-zone exits, ball-away safety, and emergency defense.', scenario: 3 },
+      { id: 'defense', title: 'Protect the house', time: '4 min', text: 'House-to-man transition, switching man, alley force, hot, two, and slide.', scenario: 4 },
+      { id: 'special', title: 'Four-player box', time: '2 min', text: 'Active high box for an incomplete change or man-down situation.', scenario: 5 }
+    ];
+
+    const scenarios = [
+      {
+        name: 'Clear vs. zone', kicker: 'Goalie clear',
+        description: 'Assume the defense is organized in a five-player zone. The goalie looks to either side first. The middle is available only when that receiver is already beyond midfield.',
+        players: [
+          ['G',350,735,'goalie','Goalie: read left side, right side, then the receiver already beyond midfield.'], ['1',350,385,'home','Deep middle: show your stick only after crossing midfield.'],
+          ['2',145,585,'home','Wide left: primary outlet with feet near the sideline.'], ['3',555,585,'home','Wide right: primary outlet with feet near the sideline.'],
+          ['4',235,700,'home','Left support: stay behind the wide outlet as the safety.'], ['5',465,700,'home','Right support: stay behind the wide outlet as the safety.'],
+          ['D1',240,340,'opponent','Zone top left: guard entry and the left seam.'], ['D2',460,340,'opponent','Zone top right: guard entry and the right seam.'],
+          ['D3',350,255,'opponent','Zone middle: protect the inside lane.'], ['D4',260,170,'opponent','Zone low left: protect the pipe and crease.'], ['D5',440,170,'opponent','Zone low right: protect the pipe and crease.']
+        ], ball: [350,735],
+        steps: [
+          { name:'See the zone', instruction:'Expect five defenders in a settled zone. The goalie reads the left and right sidelines first. The middle is eligible only beyond midfield.', moves:{}, ball:[350,735], paths:[[350,735,145,585,'pass']] },
+          { name:'Hit a side', instruction:'Deliver to the cleaner wide outlet. The near support stays behind the ball while the opposite side stretches the zone.', moves:{'2':[150,535],'3':[550,515],'4':[235,650],'5':[465,630]}, ball:[150,535], paths:[[350,735,150,535,'pass'],[145,585,150,535,'move'],[555,585,550,515,'move']] },
+          { name:'Enter five-on-five', instruction:'Cross on the side, make the zone shift, and fill the Box and One shape. This is a settled five-on-five entry, not a man-up break.', moves:{'1':[350,270],'2':[165,385],'3':[535,360],'4':[230,245],'5':[470,245]}, ball:[165,385], paths:[[150,535,165,385,'move'],[235,650,230,245,'move'],[465,630,470,245,'move']] }
+        ]
+      },
+      {
+        name: 'Cut + replace', kicker: 'Box and One',
+        description: 'Four outside players form the box. A denied cutter becomes the new inside player, and the old inside player fills the open corner.',
+        players: [
+          ['1',235,330,'home','High left: carry, pass, pick, or cut.'], ['2',465,330,'home','High right: maintain shooting width.'],
+          ['3',205,175,'home','Low left: start at or just above GLE.'], ['4',495,175,'home','Low right: start at or just above GLE.'],
+          ['5',350,230,'home','Inside: screen, seal, show hands, and own the expand call.'],
+          ['D1',255,315,'opponent','Defense tracks the cutter.'], ['D2',445,315,'opponent','Defense guards the adjacent threat.'], ['D3',230,180,'opponent','Defense protects low left.'], ['D4',470,180,'opponent','Defense protects low right.'], ['D5',350,205,'opponent','Defense protects inside.']
+        ], ball:[235,330],
+        steps: [
+          { name:'Pass', instruction:'High left passes across the top and immediately attacks the middle.', moves:{}, ball:[465,330], paths:[[235,330,465,330,'pass']] },
+          { name:'Cut hard', instruction:'The passer cuts through the scoring area with a visible stick. The receiver may return the ball.', moves:{'1':[350,230]}, ball:[465,330], paths:[[235,330,350,230,'move'],[465,330,350,230,'pass']] },
+          { name:'Replace', instruction:'If the feed is denied, the cutter stays inside. The old inside player fills high left.', moves:{'1':[350,230],'5':[235,330]}, ball:[465,330], paths:[[350,230,235,330,'move']] }
+        ]
+      },
+      {
+        name: 'Expand', kicker: 'Perimeter offense',
+        description: 'After two or three strong inside attacks compress the defense, the inside player calls “expand.” Four shooters widen while the inside player stays home.',
+        players: [
+          ['1',265,300,'home','Outside: widen and prepare to catch ready.'], ['2',435,300,'home','Outside: move the ball before the defense expands.'],
+          ['3',260,185,'home','Outside: step into a clean lane if available.'], ['4',440,185,'home','Outside: stay a threat above GLE.'],
+          ['5',350,225,'home','Inside: call expand, screen the goalie, remain a feed threat.'],
+          ['D1',300,260,'opponent','Compressed defender.'], ['D2',400,260,'opponent','Compressed defender.'], ['D3',300,205,'opponent','Compressed defender.'], ['D4',400,205,'opponent','Compressed defender.'], ['D5',350,180,'opponent','Inside matchup.']
+        ], ball:[435,300],
+        steps: [
+          { name:'See collapse', instruction:'Inside sees the defense congest the scoring area and calls “expand.”', moves:{}, ball:[435,300], paths:[] },
+          { name:'Widen four', instruction:'The four outside players widen immediately. The inside player stays as a screen and scoring threat.', moves:{'1':[180,350],'2':[520,350],'3':[175,155],'4':[525,155]}, ball:[520,350], paths:[[265,300,180,350,'move'],[435,300,520,350,'move'],[260,185,175,155,'move'],[440,185,525,155,'move']] },
+          { name:'Move and shoot', instruction:'Move the ball outside the collapse. The shooter owns the decision when the lane is clean.', moves:{'1':[180,350],'2':[520,350],'3':[175,155],'4':[525,155]}, ball:[525,155], paths:[[520,350,525,155,'pass'],[525,155,350,126,'pass']] }
+        ]
+      },
+      {
+        name: 'Safe change', kicker: 'Substitution',
+        description: 'A routine change comes from secure offense. The tired player rotates to the substitution-side sideline, the ball moves away, and the replacement fills the same responsibility.',
+        players: [
+          ['1',205,310,'home','Ball carrier: keep possession away from the exchange.'], ['2',495,310,'home','Far high: present the safe pass.'],
+          ['3',210,175,'home','Far low: maintain width.'], ['4',510,235,'home','Tired player: reach the substitution-side sideline before exiting.'],
+          ['5',350,225,'home','Inside: hold the middle and call expand if needed.'], ['6',675,475,'home','Next up: wait outside the sideline until the departing player is fully off.'],
+          ['D1',230,290,'opponent','Defense pressures away from the change.'], ['D2',465,290,'opponent','Defense stays matched.']
+        ], ball:[205,310],
+        steps: [
+          { name:'Call change', instruction:'The tired player calls “change” only after secure offense with no immediate advantage.', moves:{}, ball:[205,310], paths:[] },
+          { name:'Ball away', instruction:'Move the ball to the far side while the tired player exits through the marked sideline substitution zone.', moves:{'4':[630,450]}, ball:[495,310], paths:[[205,310,495,310,'pass'],[510,235,630,450,'move']] },
+          { name:'One off, one on', instruction:'The next player waits for a complete sideline exit, then enters through the same zone and fills the vacated responsibility.', moves:{'4':[675,535],'6':[510,235]}, ball:[495,310], paths:[[675,475,630,450,'move'],[630,450,510,235,'move']] }
+        ]
+      },
+      {
+        name: 'House → man', kicker: 'Transition defense',
+        description: 'Protect the middle before chasing matchups. Stop the ball, find threats from the inside outward, then call “matched” and switch all picks.',
+        players: [
+          ['1',350,250,'home','First back: protect the house.'], ['2',270,315,'home','Nearest defender: stop the ball without opening the middle.'],
+          ['3',430,260,'home','Inside-out: identify the most dangerous threat.'], ['4',220,215,'home','Protect the ball-side pipe and passing lane.'],
+          ['5',480,340,'home','Fifth back: find the trailer and complete the match.'],
+          ['O1',270,390,'opponent','Ball carrier.'], ['O2',350,190,'opponent','Inside threat.'], ['O3',480,220,'opponent','Backside threat.'], ['O4',180,240,'opponent','Ball-side wing.'], ['O5',500,410,'opponent','Trailer.']
+        ], ball:[270,390],
+        steps: [
+          { name:'House', instruction:'First defenders back protect the middle and pipes. Nobody chases an old matchup.', moves:{}, ball:[270,390], paths:[] },
+          { name:'Stop ball', instruction:'The nearest defender meets the ball and forces it toward the sideline or alley.', moves:{'2':[245,350]}, ball:[235,360], paths:[[270,315,245,350,'move'],[270,390,235,360,'move']] },
+          { name:'Matched', instruction:'The fifth defender identifies the trailer. Once all five threats are covered, call “matched.”', moves:{'5':[475,385]}, ball:[235,360], paths:[[480,340,475,385,'move']] }
+        ]
+      },
+      {
+        name: 'Active high box', kicker: 'Five versus four defense',
+        description: 'During an incomplete change or penalty, four defenders form an active high box. Stay outside the crease, move with the ball, and preserve the goalie’s sightline.',
+        players: [
+          ['G',350,150,'goalie','Goalie: see the outside shot and direct movement.'], ['1',275,315,'home','Top left: contain ball-side space.'],
+          ['2',425,315,'home','Top right: deny the high seam.'], ['3',275,205,'home','Low left: protect the pipe and inside lane.'], ['4',425,205,'home','Low right: protect the pipe and inside lane.'],
+          ['O1',180,330,'opponent','Ball carrier.'], ['O2',350,370,'opponent','High threat.'], ['O3',520,330,'opponent','Opposite wing.'], ['O4',220,165,'opponent','Low threat.'], ['O5',480,165,'opponent','Low threat.']
+        ], ball:[180,330],
+        steps: [
+          { name:'Active box', instruction:'Set high enough to avoid walling. All four defenders stay moving and engaged.', moves:{}, ball:[180,330], paths:[] },
+          { name:'Move with ball', instruction:'The box shifts toward the ball without collapsing into the crease.', moves:{'1':[245,300],'2':[395,315],'3':[250,205],'4':[400,210]}, ball:[220,165], paths:[[180,330,220,165,'pass']] },
+          { name:'Restore five', instruction:'The returning player finds the most dangerous uncovered threat. Call “matched” and convert to switching man.', moves:{}, ball:[220,165], paths:[] }
+        ]
+      }
+    ];
+
+    const quiz = [
+      { q:'The goalie has possession and sees the opponent set in a zone. What is the first outlet read?', a:['Force the ball up the middle','Look to either sideline','Wait for a defender to double'], correct:1, why:'The clear begins with width. Use a middle outlet only when that receiver is already beyond midfield.' },
+      { q:'A box player passes, cuts hard, and the return feed is denied. What happens next?', a:['The cutter returns to the original spot','The cutter becomes the inside player and the old inside fills the corner','Both players stay inside'], correct:1, why:'Cut and replace keeps the shape intact and rotates every player through the inside role.' },
+      { q:'Who calls “expand” when the defense collapses?', a:['The coach','The ball carrier','The inside player'], correct:2, why:'The inside player feels the congestion and owns the expand call.' },
+      { q:'When may a tired player begin a routine change?', a:['While riding after a turnover','After secure offensive possession with no immediate advantage','Whenever the player reaches midfield'], correct:1, why:'Secure offense protects the exchange and prevents an avoidable five-on-four break.' },
+      { q:'In transition defense, what comes first?', a:['Find your original matchup','Protect the house','Double the ball'], correct:1, why:'Protect the middle first, then match threats from the inside outward.' },
+      { q:'The goalie calls “slide.” What does the hot defender do?', a:['Stunt and recover','Wait for the ball carrier to shoot','Commit fully to the ball carrier'], correct:2, why:'A goalie-called slide is irreversible. Hesitation defeats the entire rotation.' },
+      { q:'A clean shot hits the goal frame and exits the field. Who receives possession?', a:['The offense','The defense','Alternate possession'], correct:1, why:'Under the local rules, the goal frame does not preserve offensive possession.' },
+      { q:'What does the defense do during an incomplete change?', a:['Crowd the crease in a wall','Run a three-player trap','Form an active high box until the fifth player restores the match'], correct:2, why:'The active high box protects inside lanes while staying legal and preserving the goalie’s view.' }
+    ];
+
+    let currentScenario = 0;
+    let currentStep = -1;
+    let playTimer = null;
+    let quizIndex = 0;
+    let quizScore = 0;
+    let answered = false;
+    let whatIfMode = false;
+    let whatIfPositions = {};
+    let whatIfBall = null;
+    let dragState = null;
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const modulePart = state.completed.length / modules.length;
+      const quizPart = state.quizBest >= 7 ? 1 : state.quizBest / 8;
+      const percent = Math.round((modulePart * .8 + quizPart * .2) * 100);
+      document.getElementById('progressFill').style.width = percent + '%';
+      document.getElementById('progressText').textContent = percent + '%';
+      renderModules();
+    }
+
+    function renderModules() {
+      const grid = document.getElementById('moduleGrid');
+      grid.innerHTML = modules.map((m, i) => {
+        const done = state.completed.includes(m.id);
+        return `<article class="module-card" data-number="${i+1}">
+          <span class="status-pill ${done ? 'done' : ''}">${done ? '✓ Complete' : m.time}</span>
+          <h3>${m.title}</h3><p>${m.text}</p>
+          <button class="btn ${done ? 'btn-dark' : 'btn-red'} btn-small" data-module="${m.id}">${done ? 'Review' : 'Open module'}</button>
+        </article>`;
+      }).join('');
+      grid.querySelectorAll('[data-module]').forEach(btn => btn.addEventListener('click', () => openModule(btn.dataset.module)));
+    }
+
+    function openModule(id) {
+      const m = modules.find(x => x.id === id);
+      if (m.scenario !== undefined) {
+        setScenario(m.scenario);
+        document.getElementById('fieldLab').scrollIntoView();
+      } else {
+        document.getElementById('rulesTitle').scrollIntoView();
+      }
+      if (!state.completed.includes(id)) {
+        state.completed.push(id);
+        saveState();
+        showToast(`${m.title} marked complete`);
+      }
+    }
+
+    function renderScenarioTabs() {
+      const el = document.getElementById('scenarioTabs');
+      el.innerHTML = scenarios.map((s, i) => `<button class="scenario-tab ${i === currentScenario ? 'active' : ''}" data-scenario="${i}">${s.name}</button>`).join('');
+      el.querySelectorAll('button').forEach(b => b.addEventListener('click', () => setScenario(Number(b.dataset.scenario))));
+    }
+
+    function setScenario(index) {
+      stopPlay();
+      currentScenario = index;
+      currentStep = -1;
+      whatIfPositions = {};
+      whatIfBall = null;
+      clearWhatIfResult();
+      renderScenarioTabs();
+      renderField();
+      const s = scenarios[index];
+      document.getElementById('detailKicker').textContent = s.kicker;
+      document.getElementById('detailTitle').textContent = s.name;
+      document.getElementById('detailDescription').textContent = s.description;
+      updateStepPanel();
+    }
+
+    function positionsForStep() {
+      const s = scenarios[currentScenario];
+      const positions = Object.fromEntries(s.players.map(p => [p[0], [p[1],p[2]]]));
+      for (let i = 0; i <= currentStep; i++) Object.entries(s.steps[i]?.moves || {}).forEach(([id,pos]) => positions[id] = pos);
+      Object.entries(whatIfPositions).forEach(([id,pos]) => positions[id] = pos);
+      return positions;
+    }
+
+    function renderField() {
+      const s = scenarios[currentScenario];
+      const positions = positionsForStep();
+      const layer = document.getElementById('playersLayer');
+      layer.innerHTML = s.players.map(p => {
+        const [id,,,kind,role] = p;
+        const [x,y] = positions[id];
+        return `<g class="player ${kind} ${whatIfPositions[id] ? 'moved' : ''}" data-id="${id}" data-kind="${kind}" data-role="${role}" transform="translate(${x} ${y})" tabindex="0" role="button" aria-label="Player ${id}: ${role}">
+          <circle r="23"></circle><text y="1">${id}</text>
+        </g>`;
+      }).join('');
+      layer.querySelectorAll('.player').forEach(node => {
+        const show = () => {
+          if (node.dataset.justDragged === 'true') { node.dataset.justDragged = 'false'; return; }
+          showRole(node.dataset.id, node.dataset.role);
+        };
+        node.addEventListener('click', show);
+        node.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') show(); });
+        node.addEventListener('pointerdown', beginPlayerDrag);
+      });
+      renderPaths();
+      const ballPos = whatIfBall || (currentStep >= 0 ? s.steps[currentStep].ball : s.ball);
+      setBall(ballPos);
+    }
+
+    function renderPaths() {
+      const layer = document.getElementById('pathsLayer');
+      const step = scenarios[currentScenario].steps[currentStep];
+      if (!step) { layer.innerHTML = ''; return; }
+      layer.innerHTML = (step.paths || []).map((p,i) => `<path class="motion-path visible ${p[4] === 'pass' ? 'pass-path' : ''}" d="M${p[0]} ${p[1]} L${p[2]} ${p[3]}" style="color:${p[4] === 'pass' ? 'var(--gold)' : 'white'}"></path>`).join('');
+    }
+
+    function setBall(pos) {
+      const ball = document.getElementById('ball');
+      ball.setAttribute('cx', pos[0]); ball.setAttribute('cy', pos[1]);
+    }
+
+    function updateStepPanel() {
+      const s = scenarios[currentScenario];
+      const step = s.steps[currentStep];
+      document.getElementById('stepName').textContent = step ? step.name : 'Ready';
+      document.getElementById('stepInstruction').textContent = step ? step.instruction : 'Press play or step forward.';
+      document.getElementById('stepFill').style.width = `${Math.max(0, (currentStep + 1) / s.steps.length * 100)}%`;
+      document.getElementById('roleList').innerHTML = s.players.filter(p => p[3] === 'home' || p[3] === 'goalie').slice(0,5).map(p => `<div class="role-row"><span class="role-dot"></span><span><strong>${p[0]}</strong> ${p[4]}</span></div>`).join('');
+    }
+
+    function showRole(id, role) {
+      document.getElementById('stepName').textContent = `Player ${id}`;
+      document.getElementById('stepInstruction').textContent = role;
+    }
+
+    function setWhatIfMode(enabled) {
+      whatIfMode = enabled;
+      stopPlay();
+      const wrap = document.querySelector('.field-wrap');
+      const btn = document.getElementById('whatIfBtn');
+      wrap.classList.toggle('what-if', enabled);
+      btn.classList.toggle('active', enabled);
+      btn.setAttribute('aria-pressed', String(enabled));
+      btn.querySelector('.mode-title').textContent = enabled ? 'What If Lab Is On' : 'Open What If Lab';
+      btn.querySelector('.mode-subtitle').textContent = enabled ? 'Drag any player, then release for the reaction' : 'Drag any player to test the team’s reaction';
+      btn.querySelector('.mode-icon').textContent = enabled ? '✓' : '↔';
+      if (enabled) {
+        document.getElementById('whatIfPanel').classList.add('visible');
+        document.getElementById('whatIfTitle').textContent = 'Build a what-if';
+        document.getElementById('whatIfSummary').textContent = 'Drag any player to a new location, then release.';
+        document.getElementById('whatIfResults').innerHTML = '<li>The board will check spacing, field rules, matchups, and the team shape.</li>';
+      } else {
+        dragState = null;
+      }
+    }
+
+    function svgPointFromEvent(event) {
+      const svg = document.getElementById('field');
+      const point = svg.createSVGPoint();
+      point.x = event.clientX; point.y = event.clientY;
+      return point.matrixTransform(svg.getScreenCTM().inverse());
+    }
+
+    function beginPlayerDrag(event) {
+      if (!whatIfMode) return;
+      event.preventDefault();
+      const node = event.currentTarget;
+      const id = node.dataset.id;
+      const positions = positionsForStep();
+      const ball = document.getElementById('ball');
+      const ballPos = [Number(ball.getAttribute('cx')), Number(ball.getAttribute('cy'))];
+      const pos = positions[id];
+      dragState = {
+        id, node, pointerId: event.pointerId,
+        carriesBall: Math.hypot(pos[0]-ballPos[0], pos[1]-ballPos[1]) < 38,
+        moved: false
+      };
+      node.classList.add('dragging');
+      document.getElementById('field').setPointerCapture?.(event.pointerId);
+    }
+
+    function movePlayerDrag(event) {
+      if (!dragState || event.pointerId !== dragState.pointerId) return;
+      event.preventDefault();
+      const raw = svgPointFromEvent(event);
+      const x = Math.max(58, Math.min(642, raw.x));
+      const y = Math.max(58, Math.min(842, raw.y));
+      dragState.moved = true;
+      dragState.node.setAttribute('transform', `translate(${x} ${y})`);
+      whatIfPositions[dragState.id] = [x,y];
+      if (dragState.carriesBall) { whatIfBall = [x,y]; setBall([x,y]); }
+    }
+
+    function endPlayerDrag(event) {
+      if (!dragState || event.pointerId !== dragState.pointerId) return;
+      dragState.node.classList.remove('dragging');
+      if (dragState.moved) {
+        dragState.node.dataset.justDragged = 'true';
+        analyzeWhatIf(dragState.id);
+      }
+      dragState = null;
+    }
+
+    function analyzeWhatIf(id) {
+      const s = scenarios[currentScenario];
+      const positions = positionsForStep();
+      const moved = positions[id];
+      const movedPlayer = s.players.find(p => p[0] === id);
+      const movedKind = movedPlayer?.[3];
+      const homeIds = s.players.filter(p => p[3] === 'home' || p[3] === 'goalie').map(p => p[0]);
+      const fieldIds = s.players.filter(p => p[3] === 'home').map(p => p[0]);
+      const opponentIds = s.players.filter(p => p[3] === 'opponent').map(p => p[0]);
+      const distance = (a,b) => Math.hypot(a[0]-b[0], a[1]-b[1]);
+      const nearestHome = fieldIds.filter(other => other !== id).map(other => ({id:other,d:distance(moved,positions[other])})).sort((a,b)=>a.d-b.d)[0];
+      const nearestOpponent = opponentIds.map(other => ({id:other,d:distance(moved,positions[other])})).sort((a,b)=>a.d-b.d)[0];
+      const results = [];
+      let title = `Move ${id}: shape holds`;
+      let summary = 'The move creates a playable adjustment if the other four react with it.';
+
+      if (movedKind === 'opponent') {
+        const nearestDefender = homeIds.map(home => ({id:home,d:distance(moved,positions[home])})).sort((a,b)=>a.d-b.d)[0];
+        title = `Move ${id}: defensive response`;
+        summary = 'The board checks whether this new offensive threat is matched, supported, or uncovered.';
+        if (nearestDefender.d < 65) results.push(`${nearestDefender.id} is in direct matchup range. Communicate the assignment and stay ready to switch.`);
+        else if (nearestDefender.d < 115) results.push(`${nearestDefender.id} is the nearest help defender. The defense must close under control without opening the middle.`);
+        else {
+          title = `Move ${id}: uncovered threat`;
+          results.push(`No defender is within support distance. The fifth defender must claim ${id} before the unit calls “matched.”`);
+        }
+        if (moved[0] > 285 && moved[0] < 415 && moved[1] > 155 && moved[1] < 285) results.push('This threat is inside the house. Protect it before expanding to an outside matchup.');
+        if (moved[0] < 175 || moved[0] > 525) results.push('The threat is wide. Contain the outside path and preserve the goalie’s sightline rather than chasing a trap.');
+        document.getElementById('whatIfTitle').textContent = title;
+        document.getElementById('whatIfSummary').textContent = summary;
+        document.getElementById('whatIfResults').innerHTML = results.map(r => `<li>${r}</li>`).join('');
+        document.getElementById('whatIfPanel').classList.add('visible');
+        document.getElementById('stepName').textContent = `What if ${id} moves here?`;
+        document.getElementById('stepInstruction').textContent = results[0];
+        return;
+      }
+
+      if (moved[1] > 450 && [1,2,3].includes(currentScenario)) {
+        title = `Move ${id}: turnover risk`;
+        summary = 'The offense is already established above midfield.';
+        results.push('Crossing back into the defensive half creates an over-and-back turnover.');
+      }
+      if (nearestHome && nearestHome.d < 70) {
+        title = `Move ${id}: spacing compresses`;
+        results.push(`${id} is only ${Math.round(nearestHome.d/7)} field yards from teammate ${nearestHome.id}. A single defender can influence both players.`);
+      } else if (nearestHome && nearestHome.d > 250) {
+        results.push(`The nearest teammate is far away. The shape gains width but loses a quick adjacent outlet.`);
+      } else if (nearestHome) {
+        results.push(`Adjacent spacing remains usable with teammate ${nearestHome.id}.`);
+      }
+
+      if ([1,2].includes(currentScenario)) {
+        const inMiddle = moved[0] > 285 && moved[0] < 415 && moved[1] > 165 && moved[1] < 285;
+        const wide = moved[0] < 175 || moved[0] > 525;
+        const belowGLE = moved[1] < 150;
+        if (inMiddle) results.push('This creates an inside feed, seal, or screen, but another cutter should wait until the middle clears.');
+        if (wide) results.push('This widens the defense and creates a longer closeout. Keep an adjacent passing option available.');
+        if (belowGLE) results.push('Below GLE, this player becomes a feeder or wrap threat and is no longer an immediate outside shooter.');
+        if (nearestOpponent && nearestOpponent.d < 55) results.push(`Defender ${nearestOpponent.id} can engage immediately. Use a pick, slip, or quick pass instead of holding the ball.`);
+        else if (nearestOpponent && nearestOpponent.d > 105) results.push('The nearest defender is late. This is a catch-ready shooting or downhill-dodge opportunity.');
+      }
+
+      if (currentScenario === 0) {
+        if (moved[1] < 450) results.push('This player is beyond midfield and stretches the clear into an immediate scoring threat.');
+        if (movedKind === 'home' && moved[1] > 450 && moved[0] > 260 && moved[0] < 440) results.push('This player is still in the defensive half and centered. Widen to a sideline outlet; the middle is not the preferred clear here.');
+        if (moved[0] < 180 || moved[0] > 520) results.push('The wide lane stretches the outside edge of the zone and keeps the middle from becoming congested.');
+        if (id === 'G' && moved[1] < 450) results.push('The goalie may not cross midfield. Stop before the line and deliver the pass.');
+      }
+
+      if (currentScenario === 3) {
+        const inSubArea = moved[0] > 600 && moved[0] < 660 && moved[1] > 385 && moved[1] < 515;
+        if (inSubArea) results.push('This player is in the sideline substitution zone. The replacement must wait until the exit is complete.');
+        if (!inSubArea && (id === '4' || id === '6')) results.push('A change from here stretches the exchange and can expose a temporary five-on-four break. Reach the marked sideline zone first.');
+      }
+
+      if ([4,5].includes(currentScenario)) {
+        const goalDistance = distance(moved,[350,160]);
+        if (goalDistance < 82 && id !== 'G') {
+          title = `Move ${id}: crease danger`;
+          results.push('Remaining stationary here risks illegal crease defense or walling. Stay active and engaged with a threat.');
+        }
+        if (moved[0] < 190 || moved[0] > 510 || moved[1] > 390) {
+          results.push('This move pulls a defender away from the house. The nearest teammate must pinch the open seam.');
+        }
+        if (nearestOpponent && nearestOpponent.d < 65) results.push(`${id} can claim ${nearestOpponent.id}. Communicate “matched” only after every remaining threat is covered.`);
+        const uncovered = opponentIds.filter(opp => Math.min(...homeIds.map(home => distance(positions[opp],positions[home]))) > 115);
+        if (uncovered.length) {
+          title = `Move ${id}: ${uncovered.length} threat${uncovered.length>1?'s':''} uncovered`;
+          results.push(`Uncovered now: ${uncovered.join(', ')}. Recover inside-out before calling “matched.”`);
+        } else results.push('All visible threats remain within support distance. The defense can stay connected.');
+      }
+
+      if (!results.length) results.push('The formation remains balanced. Continue the normal read from this new location.');
+      document.getElementById('whatIfTitle').textContent = title;
+      document.getElementById('whatIfSummary').textContent = summary;
+      document.getElementById('whatIfResults').innerHTML = results.map(r => `<li>${r}</li>`).join('');
+      document.getElementById('whatIfPanel').classList.add('visible');
+      document.getElementById('stepName').textContent = `What if ${id} moves here?`;
+      document.getElementById('stepInstruction').textContent = results[0];
+    }
+
+    function clearWhatIfResult() {
+      const panel = document.getElementById('whatIfPanel');
+      if (!panel) return;
+      panel.classList.toggle('visible', whatIfMode);
+      document.getElementById('whatIfTitle').textContent = 'Build a what-if';
+      document.getElementById('whatIfSummary').textContent = 'Drag any player to a new location, then release.';
+      document.getElementById('whatIfResults').innerHTML = '';
+    }
+
+    function nextStep() {
+      const max = scenarios[currentScenario].steps.length - 1;
+      currentStep = currentStep >= max ? 0 : currentStep + 1;
+      renderField(); updateStepPanel();
+    }
+
+    function resetScenario() { stopPlay(); currentStep = -1; whatIfPositions = {}; whatIfBall = null; clearWhatIfResult(); renderField(); updateStepPanel(); }
+    function startPlay() {
+      if (playTimer) { stopPlay(); return; }
+      document.getElementById('playBtn').textContent = 'Ⅱ';
+      if (currentStep === scenarios[currentScenario].steps.length - 1) currentStep = -1;
+      nextStep();
+      playTimer = setInterval(() => {
+        if (currentStep === scenarios[currentScenario].steps.length - 1) stopPlay(); else nextStep();
+      }, 1800);
+    }
+    function stopPlay() { if (playTimer) clearInterval(playTimer); playTimer = null; const b=document.getElementById('playBtn'); if(b) b.textContent='▶'; }
+
+    function renderQuiz() {
+      const host = document.getElementById('quizQuestions');
+      host.innerHTML = quiz.map((item,i) => `<div class="quiz-question ${i===quizIndex?'active':''}" data-q="${i}">
+        <div class="quiz-meta">Situation ${i+1} of ${quiz.length}</div>
+        <h3>${item.q}</h3>
+        <div class="answers">${item.a.map((a,j)=>`<button class="answer-btn" data-answer="${j}">${a}</button>`).join('')}</div>
+      </div>`).join('');
+      host.querySelectorAll('.answer-btn').forEach(btn => btn.addEventListener('click', answerQuestion));
+      document.getElementById('quizScore').textContent = `Score: ${quizScore} / ${quizIndex}`;
+    }
+
+    function answerQuestion(e) {
+      if (answered) return;
+      answered = true;
+      const selected = Number(e.currentTarget.dataset.answer);
+      const item = quiz[quizIndex];
+      const group = e.currentTarget.closest('.answers');
+      group.querySelectorAll('button').forEach((b,i) => {
+        b.disabled = true;
+        if (i === item.correct) b.classList.add('correct');
+        if (i === selected && i !== item.correct) b.classList.add('wrong');
+      });
+      if (selected === item.correct) quizScore++;
+      document.getElementById('feedback').textContent = item.why;
+      document.getElementById('quizScore').textContent = `Score: ${quizScore} / ${quizIndex+1}`;
+      const next = document.getElementById('nextQuestion');
+      next.disabled = false;
+      next.textContent = quizIndex === quiz.length - 1 ? 'Finish' : 'Next';
+    }
+
+    function advanceQuiz() {
+      if (!answered) return;
+      if (quizIndex === quiz.length - 1) {
+        state.quizBest = Math.max(state.quizBest, quizScore);
+        saveState();
+        document.getElementById('feedback').textContent = quizScore >= 7 ? 'Ready standard achieved. Create your completion card below.' : 'Run it again. The Ready standard is 7 out of 8.';
+        document.getElementById('nextQuestion').textContent = 'Try again';
+        document.getElementById('nextQuestion').onclick = restartQuiz;
+        showToast(`Challenge complete: ${quizScore} / 8`);
+        return;
+      }
+      quizIndex++; answered = false;
+      document.getElementById('feedback').textContent = 'Choose the best team decision.';
+      document.getElementById('nextQuestion').disabled = true;
+      renderQuiz();
+    }
+
+    function restartQuiz() {
+      quizIndex = 0; quizScore = 0; answered = false;
+      const next = document.getElementById('nextQuestion');
+      next.onclick = advanceQuiz; next.disabled = true; next.textContent = 'Next';
+      document.getElementById('feedback').textContent = 'Choose the best team decision.';
+      renderQuiz();
+    }
+
+    function openCertificate() {
+      const name = document.getElementById('playerName').value.trim();
+      if (!name) { showToast('Enter your name first'); return; }
+      state.playerName = name; saveState();
+      document.getElementById('certName').textContent = name;
+      document.getElementById('certModules').textContent = `${state.completed.length}/6`;
+      document.getElementById('certScore').textContent = `${state.quizBest}/8`;
+      document.getElementById('certDate').textContent = new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric'}).format(new Date());
+      document.getElementById('certTitle').textContent = state.completed.length === 6 && state.quizBest >= 7 ? 'Ready to ride' : 'Keep working';
+      document.getElementById('certificateModal').classList.add('open');
+    }
+
+    function showToast(message) {
+      const t = document.getElementById('toast'); t.textContent = message; t.classList.add('show');
+      setTimeout(()=>t.classList.remove('show'), 2200);
+    }
+
+    document.getElementById('resetBtn').addEventListener('click', resetScenario);
+    document.getElementById('playBtn').addEventListener('click', startPlay);
+    document.getElementById('stepBtn').addEventListener('click', () => { stopPlay(); nextStep(); });
+    document.getElementById('whatIfBtn').addEventListener('click', () => setWhatIfMode(!whatIfMode));
+    document.getElementById('field').addEventListener('pointermove', movePlayerDrag);
+    document.getElementById('field').addEventListener('pointerup', endPlayerDrag);
+    document.getElementById('field').addEventListener('pointercancel', endPlayerDrag);
+    document.getElementById('nextQuestion').addEventListener('click', advanceQuiz);
+    document.getElementById('openCertificate').addEventListener('click', openCertificate);
+    document.getElementById('closeCertificate').addEventListener('click', () => document.getElementById('certificateModal').classList.remove('open'));
+    document.getElementById('certificateModal').addEventListener('click', e => { if (e.target.id === 'certificateModal') e.currentTarget.classList.remove('open'); });
+    document.addEventListener('keydown', e => { if(e.key === 'Escape') document.getElementById('certificateModal').classList.remove('open'); });
+
+    document.getElementById('playerName').value = state.playerName || '';
+    renderModules(); renderScenarioTabs(); setScenario(0); renderQuiz(); updateProgress();
+
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).catch(()=>{});
+  </script>
+</body>
+</html>
