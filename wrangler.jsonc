@@ -3,7 +3,7 @@
   "name": "lone-star-six",
   "compatibility_date": "2026-09-30",
   "assets": {
-    "directory": ".",
+    "directory": "./public",
     "not_found_handling": "single-page-application"
   }
 }

@@ -2,18 +2,15 @@
 
 Static, mobile-first player playbook for the Texas 6s Stampede 7th and 8th grade team.
 
-## Publish through GitHub and Cloudflare Pages
+## How it deploys
 
-1. Create a GitHub repository and push this folder to the `main` branch.
-2. In Cloudflare, open **Workers & Pages**, select **Create**, and choose **Pages**.
-3. Connect the GitHub repository and select the `main` production branch.
-4. Leave the framework preset as **None** and the build command blank.
-5. Set the build output directory to `.` and deploy.
-6. In the Pages project, open **Custom domains** and connect the team domain.
+The site is a Cloudflare Worker with static assets (project `lone-star-six`), connected to this repo through Workers Builds.
 
-Every push to `main` will trigger a new Cloudflare deployment.
-
-The site uses no external services, accounts, cookies, or analytics. Player progress is stored only in the browser with `localStorage`.
+- Everything the public sees lives in `public/`. Files outside it (this README, `wrangler.jsonc`) are never published.
+- Every commit to `main` triggers a Cloudflare build that runs `npx wrangler deploy`. No build command is needed.
+- The live site is `https://sixlax.app`.
+- `public/_headers` sets security headers and keeps `sw.js` uncached.
+- When changing `index.html`, bump the cache name in `public/sw.js` (for example `v4` to `v5`) so phones pick up the new version.
 
 ## Field Lab What If mode
 
@@ -25,7 +22,7 @@ The substitution zone is marked on the right sideline at midfield. The Safe Chan
 
 ## Local preview
 
-Run a static server from this folder, for example:
+Run a static server from the `public` folder, for example:
 
 ```bash
 python3 -m http.server 8080
@@ -35,5 +32,5 @@ Then open `http://localhost:8080`.
 
 ## Files
 
-- `index.html`: complete application, styles, diagrams, animations, quiz, and completion card.
-- `sw.js`: optional offline cache after the first visit.
+- `public/index.html`: complete application, styles, diagrams, animations, quiz, and completion card.
+- `public/sw.js`: optional offline cache after the first visit.
